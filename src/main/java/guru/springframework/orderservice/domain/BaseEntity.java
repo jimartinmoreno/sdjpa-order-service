@@ -49,7 +49,9 @@ public abstract class BaseEntity {
         if (this == o) return true;
         if (!(o instanceof BaseEntity)) return false;
         BaseEntity that = (BaseEntity) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getCreatedDate(), that.getCreatedDate()) && Objects.equals(getLastModifiedDate(), that.getLastModifiedDate());
+        return Objects.equals(getId(),
+                that.getId()) && Objects.equals(getCreatedDate(), that.getCreatedDate())
+                && Objects.equals(getLastModifiedDate(), that.getLastModifiedDate());
     }
 
     @Override
