@@ -1,25 +1,52 @@
 package guru.springframework.orderservice.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-public class OrderHeader {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@AttributeOverrides({
+        @AttributeOverride(
+                name = "shippingAddress.address",
+                column = @Column(name = "shipping_address")
+        ),
+        @AttributeOverride(
+                name = "shippingAddress.city",
+                column = @Column(name = "shipping_city")
+        ),
+        @AttributeOverride(
+                name = "shippingAddress.state",
+                column = @Column(name = "shipping_state")
+        ),
+        @AttributeOverride(
+                name = "shippingAddress.zipCode",
+                column = @Column(name = "shipping_zip_code")
+        ),
+        @AttributeOverride(
+                name = "billToAddress.address",
+                column = @Column(name = "bill_to_address")
+        ),
+        @AttributeOverride(
+                name = "billToAddress.city",
+                column = @Column(name = "bill_to_city")
+        ),
+        @AttributeOverride(
+                name = "billToAddress.state",
+                column = @Column(name = "bill_to_state")
+        ),
+        @AttributeOverride(
+                name = "billToAddress.zipCode",
+                column = @Column(name = "bill_to_zip_code")
+        )
+})
+public class OrderHeader extends BaseEntity{
 
     private String customer;
 
-    public Long getId() {
-        return id;
-    }
+    @Embedded
+    private Address shippingAddress;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Embedded
+    private Address billToAddress;
 
     public String getCustomer() {
         return customer;
@@ -32,18 +59,14 @@ public class OrderHeader {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof OrderHeader)) return false;
+        if (!super.equals(o)) return false;
         OrderHeader that = (OrderHeader) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        return customer != null ? customer.equals(that.customer) : that.customer == null;
+        return Objects.equals(getCustomer(), that.getCustomer()) && Objects.equals(shippingAddress, that.shippingAddress) && Objects.equals(billToAddress, that.billToAddress);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (customer != null ? customer.hashCode() : 0);
-        return result;
+        return Objects.hash(super.hashCode(), getCustomer(), shippingAddress, billToAddress);
     }
 }
