@@ -1,6 +1,7 @@
 package guru.springframework.orderservice.repositories;
 
 import guru.springframework.orderservice.domain.OrderHeader;
+import guru.springframework.orderservice.domain.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,10 +19,12 @@ class OrderHeaderRepositoryTest {
     @Autowired
     OrderHeaderRepository orderHeaderRepository;
 
+    //@Commit
     @Test
     void testSaveOrder() {
         OrderHeader orderHeader = new OrderHeader();
         orderHeader.setCustomer("New Customer");
+        orderHeader.setOrderStatus(OrderStatus.NEW);
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
         assertNotNull(savedOrder);
@@ -32,5 +35,13 @@ class OrderHeaderRepositoryTest {
         assertNotNull(fetchedOrder);
         assertNotNull(fetchedOrder.getId());
         assertThat(savedOrder.getId()).isEqualTo(fetchedOrder.getId());
+        assertNotNull(fetchedOrder.getCreatedDate());
+        assertNotNull(fetchedOrder.getLastModifiedDate());
+
+        //orderHeaderRepository.delete(fetchedOrder);
+
+//        assertThrows(Exception.class, () -> {
+//            orderHeaderRepository.getById(id);
+//        });
     }
 }
